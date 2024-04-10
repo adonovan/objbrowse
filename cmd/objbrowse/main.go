@@ -17,6 +17,9 @@ import (
 )
 
 func main() {
+	log.SetPrefix("objbrowse: ")
+	log.SetFlags(0)
+
 	flagHttp := flag.String("http", "localhost:0", "HTTP service address (e.g., ':6060')")
 	flagDev := flag.String("dev", "", "compile and serve web files from file system `path`")
 	flag.Usage = func() {
@@ -33,11 +36,11 @@ func main() {
 	objPath := flag.Arg(0)
 	f, err := os.Open(objPath)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
+		log.Fatal(err)
 	}
 	objF, err := obj.Open(f)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %s\n", objPath, err)
+		log.Fatalf("%s: %s", objPath, err)
 	}
 
 	var staticFS fs.FS = embedFS
